@@ -34,23 +34,28 @@ public class Brokerage implements Login{
 	}
 	public int login(String name, String password)
 	{
-		if (traders.get(name) == null) {
+		final String welcome = "Welcome to SafeTrade!";
+		Trader login = traders.get(name);
+		if(login == null)
+		{
 			return -1;
 		}
-		else if (traders.get(name).getPassword() != password) {
+		if(!login.getPassword().equals(password))
+		{
 			return -2;
 		}
-		else if (activeTraders.contains(traders.get(name))) {
+		if(activeTraders.contains(login))
+		{
 			return -3;
 		}
-		else {
-			activeTraders.add(new Trader(this, name, password));
-			if(!traders.get(name).hasMessages()) {
-				traders.get(name).receiveMessage("Welcome to SafeTrade!");
-			}
-			traders.get(name).openWindow();
-			return 0;
-		}
+		activeTraders.add(login);
+		
+		if(!login.hasMessages()) 
+		{
+			login.receiveMessage(welcome);
+		}		
+		login.openWindow();
+		return 0;
 	}
 	public void logout(Trader trader)
 	{

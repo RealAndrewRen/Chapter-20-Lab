@@ -38,12 +38,12 @@ public class Trader implements Comparable<Trader>{
 	public boolean hasMessages() {
 		return mailbox.size() != 0;
 	}
-	@SuppressWarnings("deprecation")
 	public void openWindow() {
 		myWindow = new TraderWindow(this);
-		for(String msg : mailbox) {
-			myWindow.show(mailbox.remove(msg));
-		}
+		for(String msg: mailbox)
+			myWindow.showMessage(msg);
+		while(mailbox.size() != 0)
+			mailbox.remove(0);
 	}
 	public void placeOrder(TradeOrder order) {
 		brokerage.placeOrder(order);
@@ -52,14 +52,14 @@ public class Trader implements Comparable<Trader>{
 		myWindow = null;
 		brokerage.logout(this);
 	}
-	@SuppressWarnings("deprecation")
+
 	public void receiveMessage(String msg) {
 		mailbox.add(msg);
-		if (myWindow != null)
-		{
-			for (String message : mailbox) {
-				myWindow.show(mailbox.remove(message));
-			}
+		if(myWindow != null) {
+			for(String message: mailbox)
+				myWindow.showMessage(message);
+			while(mailbox.size() > 0)
+				mailbox.remove(0);
 		}
 	}
 }
